@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Quote } from '../types';
 import { AUTHORS, INITIAL_QUOTES } from '../constants';
-import { generateInsight } from '../services/geminiService';
+import { generateInsight, apiKey } from '../services/geminiService';
 import { Heart, Sparkles, Shuffle, Quote as QuoteIcon, PenLine, Plus, Save } from 'lucide-react';
 import { Button } from './ui/Button';
 
@@ -229,7 +229,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({ favorites, onToggleFavor
                  variant="primary" 
                  onClick={handleAIGenerate}
                  isLoading={loading}
-                 disabled={!process.env.API_KEY}
+                 disabled={!apiKey}
                  className="h-14 flex flex-col gap-1 items-center justify-center bg-gradient-to-r from-zen-600 to-zen-500"
                >
                  <Sparkles size={20} />
@@ -246,7 +246,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({ favorites, onToggleFavor
                </Button>
              </div>
            )}
-           {!showCustomInput && !process.env.API_KEY && (
+           {!showCustomInput && !apiKey && (
              <p className="text-[10px] text-center text-zen-400">配置 API KEY 以启用 AI 功能</p>
            )}
         </div>

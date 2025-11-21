@@ -1,7 +1,33 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Quote } from '../types';
 
-const apiKey = process.env.API_KEY;
+// Robust API Key retrieval for both Vite (Vercel) and local preview environments
+const getApiKey = (): string | undefined => {
+  // 1. Try Vite environment (import.meta.env)
+  try {
+    // @ts-ignore
+    if (import.meta && import.meta.env && import.meta.env.VITE_API_KEY) {
+      // @ts-ignore
+      return import.meta.env.VITE_API_KEY;
+    }
+  } catch (e) {
+    // Ignore errors in environments where import.meta is not supported
+  }
+
+  // 2. Try Node/Process environment (standard fallback)
+  try {
+    if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+      return process.env.API_KEY;
+    }
+  } catch (e) {
+    // Ignore
+  }
+
+  return undefined;
+};
+
+export const apiKey = getApiKey();
+
 // Initialize genAI only if key is present (handled gracefully in UI if missing)
 const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
